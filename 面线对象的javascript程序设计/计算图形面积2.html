@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <canvas id="mycanvas" width="800" height="600"></canvas>
+    </body>
+    <script type="text/javascript">
+    	function Point(x,y){
+    		this.x = x;
+    		this.y = y;
+    	}
+    	function Line(p1,p2){
+    		this.p1 = p1;
+    		this.p2 = p2;
+    		this.length=Math.sqrt(Math.pow(p1.x-p2.x,2)+Math.pow(p1.y-p2.y,2));
+    	}
+    	function Shap() {
+    		this.points = [];
+    		this.lines = [];
+    		this.init();
+    	}
+    	Shap.prototype.init = function(){
+    		if (typeof this.context === "undefined") {
+    			var canvas = document.getElementById("mycanvas");
+    			this.context = canvas.getContext("2d");
+    		}
+    		return this;
+    	}
+    	Shap.prototype.draw = function(){
+    		var cxt = this.context;
+    		cxt.strokeStyle = this.getColor();
+    		cxt.beginPath();
+    		cxt.moveTo(this.points[0].x, this.points[0].y);
+    		for(var i =1,len = this.points.length;i<len;i++){
+    			var p = this.points[i];
+    			cxt.lineTo(p.x, p.y);
+    		}
+    		cxt.closePath();
+    		cxt.stroke();
+    	}
+    	Shap.prototype.getColor = function(){
+    		var colors = [];
+    		for(var i = 0;i<3;i++){
+    			colors.push(Math.round(Math.random()*255));
+    		}
+    		return "rgb("+colors.join(",")+")";
+    	}
+    	Shap.prototype.getLines = function(argument) {
+    		if (this.lines&&this.lines.length>0) {
+    			return this.lines;
+    		}
+    		var lines = [];
+    		for(var i = 0,len = this.points.length;i<len;i++){
+    			var ps = this.points[i];
+    			var pd = this.points[i+1]||this.points[0];
+    			lines.push(new Line(ps,pd));
+    		}
+    		this.lines = lines;
+    		return lines;
+    	}
+    	Shap.prototype.getArea = function(){
+    		throw new Error("重写");
+    	}
+    	Shap.prototype.getPerimeter = function(){
+            var lines = this.getLines();
+    		var result = 0;
+    		for(var i = 0,len=lines.length;i<len;i++){
+    			result += lines[i].length;
+    		}
+    		return result;
+    	}
+
+    	function Triangle(a,b,c){
+    		this.points = [a,b,c];
+            this.getArea = function(){
+                var p = this.getPerimeter()/2;
+                var a = this.lines[0].length;
+                var b = this.lines[1].length;
+                var c = this.lines[2].length;
+                return Math.sqrt(p*(p-a)*(p-b)*(p-c));
+            }
+    	}    		
+
+    	function Rectangle(p,side_a,side_b){
+    		this.points = [p];
+    		this.points.push(new Point(p.x+side_a,p.y));
+    		this.points.push(new Point(p.x+side_a,p.y+side_b));
+    		this.points.push(new Point(p.x,p.y+side_b));
+            this.getArea = function(){
+                return side_a*side_b;
+            }
+    	}
+
+    	function Square(p,side){
+    		Rectangle.call(this,p,side,side);
+    	}
+    	
+        (function(){
+            var s = new Shap();
+            Triangle.prototype = s;
+            Rectangle.prototype = s;
+            Square.prototype = s;
+
+            var p1 = new Point(100,100);
+            var p2 = new Point(300,100);
+            var p3 = new Point(200,0);
+            var t = new Triangle(p1,p2,p3);
+            t.init();
+            t.draw();
+            console.log(t.getPerimeter());
+            console.log(t.getArea());
+            var r = new Rectangle(new Point(200,200),50,100);
+            r.init();
+            r.draw();
+            console.log(r.getPerimeter());
+            console.log(r.getArea());
+
+            var s = new Square(new Point(130,130),50);
+            console.log(s)
+            s.init();
+            s.draw();
+            console.log(s.getPerimeter());
+            console.log(s.getArea());
+
+            new Square(p1,200).init().draw();
+        })();
+    </script>
+</html>
