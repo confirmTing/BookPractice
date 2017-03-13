@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var appendDiv = function(callback){
+    		for(var i = 0;i<10;i++){
+    			var div = $("<div>"+i+"</div>");
+    			$('body').append(div)
+    			if(typeof callback ==="function"){
+    				callback(div)
+    			}
+    		}
+    	}
+
+    	appendDiv(function(node){
+    		node.hide();
+    	})
+    </script>
+</html>

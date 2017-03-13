@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var timeChunk = function(fn,arr,count){
+    		var time;
+    		var start = function(){
+    			for(var i =0,l=Math.min(count,arr.length);i<l;i++){
+    				var obj = arr.shift();
+    				fn(obj)
+    			}
+    		}
+
+    		return function(){
+    			setInterval(function(){
+    				if(arr.length==0){
+    					clearInterval(time);
+    				}
+    				start();
+    			}, 200)
+    		}
+    	}
+
+    	var arr = [];
+    	for(var i =0;i<500;i++){
+    		arr.push(i)
+    	}
+
+    	var fun = (timeChunk(function(obj){
+    		console.log(obj)
+    	},arr,8))()
+
+    </script>
+</html>

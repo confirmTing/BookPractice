@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var Flower = function(name){this.name=name;}
+
+    	var A = {
+    		name:"xiaoMing",
+    		sendFlower:function(target){
+    			target.receiverFlower(Girl,"玫瑰")
+    		},
+    	}
+
+    	var B = {
+    		name:"daili",
+    		receiverFlower:function(target,flowerName){
+    			target.listenGoodMood(function(){
+    				var flower = new Flower(flowerName);
+    				target.receiverFlower(flower);
+    			})
+    		},
+    	}
+
+    	var Girl = {
+    		name:"女神",
+    		listenGoodMood:function(fn){
+    			setTimeout(function(){
+    				fn()
+    			}, 2000)
+    		},
+    		receiverFlower:function(flower){
+    			console.log("收到"+flower.name+"花");
+    		}
+    	}
+
+    	A.sendFlower(B)
+    </script>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="login">通用的单例模式</button>
+    </body>
+    <script type="text/javascript">
+    	var getSingle = function(fn){
+    		var result;
+    		return function(){
+    			return result||(result=fn.apply(this,arguments));
+    		}
+    	}
+
+    	var createLoginLayer = function(){
+    		var div = document.createElement("div")
+    		div.innerHTML="我是登录弹窗"+"<button id=\"doLogin\">登录</button>";
+    		div.style.display="none";
+    		document.body.appendChild(div);
+    		return div;
+    	}
+
+    	var createSingleLoginLayer = getSingle(createLoginLayer);
+    	var bindEvent = getSingle(function(){
+    		document.getElementById("doLogin").onclick=function(){
+    			createSingleLoginLayer().style.display="none";
+    		}
+    		console.log(11)
+    		return true;
+    	})
+
+    	document.getElementById("login").onclick=function(){
+    		var loginLayer = createSingleLoginLayer();
+    		loginLayer.style.display="block";
+    		bindEvent();
+    	}
+
+    </script>
+</html>

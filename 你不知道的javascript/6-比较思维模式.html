@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	// 类思维模式
+    	function Foo(who) {
+    		this.name = who
+    	}
+    	Foo.prototype.identify=function(){
+    		return this.name;
+    	}
+    	function Bar(who) {
+    		Foo.call(this,who)
+    	}
+    	Bar.prototype=Object.create(Foo.prototype)
+    	Bar.prototype.speak=function(){
+    		console.log(this.identify())
+    	}
+    	var a1 = new Bar("a1");
+    	var a2 = new Bar("a2");
+    	console.log(a1)
+    	a1.speak();
+    	a2.speak();
+
+    	// 对象关联
+    	Foo2 = {
+    		init:function(who){
+    			this.name =who;
+    		},
+    		identify:function(){
+    			return this.name;
+    		}
+    	}
+    	Bar2 = Object.create(Foo2);
+    	Bar2.speak = function(){
+    		console.log(this.identify())
+    	}
+    	var b1 = Object.create(Bar2)
+    	b1.init("b1");
+    	b1.speak();
+    </script>
+</html>

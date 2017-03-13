@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="btn">按钮</button>
+    <input type="text" id="name">
+    </body>
+    <script type="text/javascript">
+    	var trigger=(function(){
+    		if(document.createEventObject){//ie
+    			return function(event){
+    				var e = document.createEventObject();
+    				this.fireEvent("on"+event,e)
+    			}
+    		}else{
+    			return function(event){
+    				var e = document.createEvent('HTMLEvents');
+    				e.initEvent(event, true, true);
+    				this.dispatchEvent(e)
+    			}
+    		}
+    	})();
+
+    	var addEvent = (function(){
+    		console.log(111)
+    		if(window.addEventListener){
+    			return function(type,el,fn){
+    				el.addEventListener(type, fn, false);
+    			}
+    		}
+    		if(window.attachEvent){
+    			return function(type,el,fn){
+    				el.attachEvent("on"+type,fn)
+    			}
+    		}
+    	})();
+
+    	var btn = document.getElementById('btn');
+    	addEvent('click',btn,function(e){
+    		console.log("click")
+    		trigger.call(document.getElementById("name"),'change');
+    	}, false)
+
+    	addEvent('change',document.getElementById("name"),function(){
+    		console.log("change")
+    	}, false)
+
+    	setTimeout(function(){
+    		trigger.call(btn,"click");
+    	}, 2000)
+
+    </script>
+</html>

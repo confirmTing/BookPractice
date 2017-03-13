@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script>
+    	//只给创建一个实例，如果已经创建过了则返回这个对象，如果没有创建则创建并返回
+    	var Singleton = function(name){
+    		this.name = name;
+    	}
+
+    	Singleton.prototype.getName = function(){
+    		console.log(this.name);
+    	}
+
+    	Singleton.getInstance = function(name){
+    		if(!this.instance){
+    			return this.instance=new Singleton(name);
+    		}
+    		return this.instance;
+    	}
+
+    	var a = Singleton.getInstance("aaa")
+    	var b = Singleton.getInstance("bbb")
+    	console.log(a,b,a===b)
+    </script>
+</html>

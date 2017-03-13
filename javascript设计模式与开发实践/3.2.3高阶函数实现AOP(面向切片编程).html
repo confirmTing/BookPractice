@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	Function.prototype.before=function(fn){
+    		return function(){
+    			fn.apply(this,arguments)
+    			return this.apply(this,arguments)
+    		}.bind(this)
+    	}
+    	Function.prototype.after=function(fn){
+    		return function(){
+    			var ret = this.apply(this,arguments)
+    			fn.apply(this,arguments)
+    			return ret
+    		}.bind(this)
+    	}
+
+    	function test(){
+    		console.log(1)
+    	}
+
+    	test = test.after(function(){
+    		console.log(2)
+    	}).before(function(){
+    		console.log(3)
+    	})
+
+    	console.dir(test)
+
+    	test()
+
+    </script>
+</html>

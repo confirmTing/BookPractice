@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var MyModules = (function(){
+    		var modules = {};
+    		function define(name,deps,impl){
+    			for(var i = 0;i<deps.length;i++){
+    				deps[i] = modules[deps[i]];  //此处将传递过来的字符串数组转换为models里面所存储的module
+    			}
+    			modules[name]=impl.apply(impl,deps)
+    		}
+    		function get(name){
+    			return modules[name];
+    		}
+    		return {
+    			define:define,
+    			get:get
+    		}
+    	})();
+
+    	MyModules.define("a",[],function(){
+    		function hello(who){
+    			return "let me introduce"+who
+    		}
+    		return {
+    			hello:hello
+    		}
+    	})
+
+    	var a = MyModules.get("a");
+    	MyModules.define("b",["a"],function(a){
+    		console.log(a,arguments)
+    		function awesome(){
+    			return a.hello("zhangsan").toUpperCase();
+    		}
+    		return {
+    			awesome:awesome
+    		}
+    	})
+    	var b = MyModules.get("b");
+    	console.log(b.awesome())
+    </script>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	function identify(){
+    		return this.name
+    	}
+    	function speak(){
+    		console.log("hello i'm "+foo.call(this))
+    	}
+
+    	var me = {
+    		name:"张三"
+    	}
+    	var you = {
+    		name:"李四"
+    	}
+    	console.log(you)
+    	// speak.call(me)
+    	// speak.call(you)
+
+    	you.speak = identify;
+    	console.log(you.speak());
+    	me.speak = you.speak;
+    	console.log(me.speak()) 
+
+    	window.count=0
+    	function foo(num){
+    		console.log(num)
+    		this.count++
+    	}
+    	foo.count=0;
+    	for (var i = 0; i < 10; i++) {
+    		if(i>5){
+    			foo.call(foo,i)
+    		}
+    	}
+    	console.log(foo.count)
+
+    	function sum (a,b){
+    		this.value = a+b;
+    	}
+    	var bar = sum.bind(null,"p1");
+    	console.log(bar)
+    	var baz = new bar("p2");
+    	console.log(baz.value)
+
+    	function argu(argument) {
+    		var arg = [].slice.call(arguments)
+    		console.log(arg)
+    		console.log(arg.slice(1))
+    	}
+    	argu("a","b","c")
+
+    </script>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	function Foo(){}
+    	// var a1 = new Foo();
+    	var a1 = Object.create(Foo)
+    	// console.log(a1.constructor)
+    	// a1.constructor=function Gotcha(){}
+    	// console.log(a1.constructor)
+    	// Object.defineProperty(Foo,"constructor",{
+    	// 	enumerable:false,
+    	// 	value:function Gotcha(){}
+    	// })
+    	console.log(a1)
+        var D = {
+            foo:function(){console.log("d.foo")}
+        }
+        var E = Object.create(D)
+        E.foo()
+    </script>
+</html>

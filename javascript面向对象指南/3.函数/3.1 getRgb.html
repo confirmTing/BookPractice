@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+        	::-webkit-scrollbar/*整体部分*/{
+        		width: 5px;
+        	}
+			
+			/*滑动轨道*/
+        	::-webkit-scrollbar-track{
+        		-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        		border-radius: 0px;
+        		background: rgba(0,0,0,0.1);
+        	}
+			
+			/*滑块*/
+        	::-webkit-scrollbar-thumb{
+        		border-radius: 5px;
+        		-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        		background: rgba(0,0,0,0.2);
+        	}
+			
+			/*滑块效果*/
+        	::-webkit-scrollbar-thumb:hover{
+        		border-radius: 5px;
+        		-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        		background: rgba(0,0,0,0.4);
+        	}
+        	div{
+        		height: 2000px;
+        	}
+        </style>
+    </head>
+    <body>
+    <div></div>
+    </body>
+    <script type="text/javascript">
+    	var getRGB = function(value){
+    		var resultArr = [];
+    		for(var i = 0,len = value.length; i<len;i++){
+    			var val = value[i];
+    			if (val==="#") {
+    				continue;
+    			}
+    			var a = parseInt(value[i],16),
+    				b = parseInt(value[++i],16);
+    			resultArr.push(a*b);
+    		}
+    		return "rgb("+resultArr.join(",")+")";
+    	}
+    	console.log(getRGB("#00FF00"));
+
+    	console.log(parseInt(1e1))     //10
+    	console.log(parseInt("1e1"))   //1
+    	console.log(parseFloat("1e1"))    //10
+    	console.log(isFinite(0/10))       //true
+    	console.log(isFinite(10/0))          //false
+    	console.log(isNaN(parseInt(NaN)))   //true
+
+    	var a = 1;
+    	function f(){
+    		function n(){
+    			alert(a);
+    		}
+    		var a = 2;
+    		n();
+    	}
+    	// f();
+    </script>
+</html>

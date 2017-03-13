@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+</head>
+<body ng-app="">
+
+<p>点击按钮:</p>
+
+<button id="btn" ng-click="count = count + 1" ng-init="count=0">OK</button>
+
+<p>按钮被点击了 {{count}} 次。</p>
+
+<p>实例中，按钮每被点击一次变量 "count" 会自动加 1。</p>
+
+</body>
+<script type="text/javascript">
+	$('#btn').click(function(event) {
+		alert(1)
+	});
+</script>
+</html>

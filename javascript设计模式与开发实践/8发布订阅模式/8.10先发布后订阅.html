@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	//之前的代码小明和售楼处仍然有耦合关系。小明要知道是哪个售楼部。
+    	//现在找个中介，小明不用知道订阅哪个售楼部的消息，售楼部也不用知道是谁订阅了消息。
+    	var Event = (function(){
+    		var List = {},
+    			list2={},
+    			listen,
+    			trigger,
+    			remove;
+    		listen = function(key,fn){
+
+    			if(!List[key]){
+    				List[key]=[];
+    			}
+    			List[key].push(fn);
+				while(list2[key].length>0){
+					var arg = list2[key].shift();
+					arg.unshift(key)
+					trigger.apply(this,arg);
+				}
+    		}
+
+    		trigger = function(){
+    			var key = [].shift.call(arguments),
+    			list = List[key];
+    			if(!list||!list.length){
+    				list2[key]||(list2[key]=[])
+    				list2[key].push([].slice.call(arguments));
+    				return
+    			}
+    			for(var i =0,fn;fn=list[i++];){
+    				fn.apply(this,arguments)
+    			}
+    		}
+
+    		remove = function(key,fn){
+    			var list = List[key];
+    			if (!fn){
+    				list.length&&(List[key].length=0);
+    			}else{
+    				var index = List[key].indexOf(fn);
+    				if(index>-1){
+    					List[key].splice(index,1);
+    				}
+    			}
+    		}
+
+    		return {
+    			listen:listen,
+    			trigger:trigger,
+    			remove:remove,
+    		}
+    	})()
+
+    	var xiaoming = function(price,squareMeter){
+    		console.log("价格："+price)
+    	}
+
+    	
+
+    	Event.trigger("88",20000)  //中介发布消息
+    	Event.trigger("88",50000)  //中介发布消息
+    	Event.trigger("88",10000)  //中介发布消息
+    	Event.trigger("110",20000)  //中介发布消息
+
+		Event.listen("88",xiaoming) //小明订阅消息
+    	
+    </script>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var obj = {A:1,a:1,b:3,c:2,d:2},str="";
+    	Object.keys(obj).sort((a,b)=>obj[b]-obj[a]).forEach(v=>{
+    		str+=v.repeat(obj[v])
+    	})
+    	console.log(str)
+    	
+    	var obj2 = {A:1,a:1,b:3,c:2,d:2},str2="";
+    	Object.keys(obj2).sort(function(a,b){return obj2[b]-obj2[a]})
+    	.forEach(function(v){
+    		str2+=v.repeat(obj2[v])
+    	})
+    	console.log(str2)
+    </script>
+</html>

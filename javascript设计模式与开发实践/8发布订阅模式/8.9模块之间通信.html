@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="btn">按钮</button>
+    <div id="box"></div>
+    </body>
+    <script type="text/javascript">
+    	var Event = (function(){
+    		var List = {},
+    			listen,
+    			trigger,
+    			remove;
+    		listen = function(key,fn){
+    			if(!List[key]){
+    				List[key]=[];
+    			}
+    			List[key].push(fn);
+    		}
+
+    		trigger = function(){
+    			var key = [].shift.call(arguments),
+    			list = List[key];
+
+    			for(var i =0,fn;fn=list[i++];){
+    				fn.apply(this,arguments)
+    			}
+    		}
+
+    		remove = function(key,fn){
+    			var list = List[key];
+    			if (!fn){
+    				list.length&&(List[key].length=0);
+    			}else{
+    				var index = List[key].indexOf(fn);
+    				if(index>-1){
+    					List[key].splice(index,1);
+    				}
+    			}
+    		}
+
+    		return {
+    			listen:listen,
+    			trigger:trigger,
+    			remove:remove,
+    		}
+    	})()
+
+    	var a = (function(){
+    		var count = 0;
+    		document.getElementById("btn").onclick=function(){
+    			Event.trigger("add",++count)
+    		}
+    	})();
+
+    	var b = (function(){
+    		var div = document.getElementById("box")
+    		Event.listen("add",function(count){
+    			box.innerHTML=count;
+    		})
+    	})()
+
+    </script>
+</html>

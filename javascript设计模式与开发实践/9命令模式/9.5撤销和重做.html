@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="btn">replay</button>
+    </body>
+    <script type="text/javascript">
+    	var Ryu = {
+    		attack:function(){
+    			console.log("攻击");
+    		},
+    		defense:function(){
+    			console.log('防御')
+    		},
+    		jump:function(){
+    			console.log("跳跃")
+    		},
+    		crouch:function(){
+    			console.log("蹲下")
+    		}
+    	}
+
+    	var commands = {
+    		"119":"jump", //W
+    		"115":"crouch", //S
+    		"97":"defense", //A
+    		"100":"attack", //D
+    	}
+
+    	var makeCommand = function(receiver,state){
+    		return function(){
+    			receiver[state]();
+    		}
+    	}
+
+    	var record = (function(){
+    		var cache = [];
+    		var c = function(event){
+    			var keyCode = event.keyCode,
+    			command = makeCommand(Ryu,commands[keyCode]);
+    			command();
+    			cache.push(command)
+    		}
+    		var replay = function(){
+    			var command;
+    			while(command = cache.shift()){
+    				command()
+    			}
+    		}
+    		return {
+    			keyup:c,
+    			replay:replay,
+    		}
+    	})()
+
+    	document.onkeypress=record.keyup;
+    	document.getElementById("btn").onclick=record.replay;
+    </script>
+</html>

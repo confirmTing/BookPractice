@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <div>
+    	<button id="execute">点我执行命令</button>
+    	<button id="undo">点我执行命令</button>
+    </div>
+    <div>
+    	<button id="execute2">点我执行命令</button>
+    	<button id="undo2">点我执行命令</button>
+    </div>
+    </body>
+    <script type="text/javascript">
+    	
+    	var Tv = {
+    		open:function(){
+    			console.log("open")
+    		},
+    		close:function(){
+    			console.log("close")
+    		}
+    	}
+
+    	// 面向对象
+    	var setCommand = function(receiver){
+    		document.querySelector("#execute").onclick=function(){
+    			receiver.open()
+    		}
+    		document.querySelector("#undo").onclick=function(){
+    			receiver.close();
+    		}
+    	}
+    	setCommand(Object.create(Tv))
+
+    	//闭包
+    	var createCommand = function(receiver){
+    		var execute=function(){
+    			return receiver.open();
+    		},
+    		undo=function(){
+    			return receiver.close();
+    		}
+    		return{
+    			execute:execute,
+    			undo:undo
+    		}
+    	}
+    	var setCommand2 = function(command){
+    		document.querySelector("#execute2").onclick=function(){
+    			command.execute()
+    		}
+    		document.querySelector("#undo2").onclick=function(){
+    			command.undo();
+    		}
+    	}
+    	setCommand2(createCommand(Tv))
+
+    </script>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var salesOffices = {
+    		clientList:{},
+    		listen:function(key,fn){
+    			if(!this.clientList[key]){
+    				this.clientList[key]=[];
+    			}
+    			this.clientList[key].push(fn);
+    		},
+    		trigger:function(){
+    			var key = [].shift.call(arguments),
+    			list = this.clientList[key];
+
+    			for(var i =0,fn;fn=list[i++];){
+    				fn.apply(this,arguments)
+    			}
+    		}
+    	}
+
+    	salesOffices.listen("88",function(price,squareMeter){
+    		console.log("价格："+price)
+    	})
+
+		salesOffices.listen("110",function(price,squareMeter){
+    		console.log("价格："+price)
+    	})
+
+    	salesOffices.trigger("110",2000)
+    	salesOffices.trigger("88",666)
+    </script>
+</html>

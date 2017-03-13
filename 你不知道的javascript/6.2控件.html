@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="../jquery-1.9.1.min.js"></script>
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	function Widget(width,height) {
+    		this.width=width;
+    		this.height=height;
+    		this.$el = null;
+    	}
+
+    	Widget.prototype.render=function($where){
+    		if (this.$el) {
+    			this.$el.css({
+    				width: this.width,
+    				height: this.height
+    			}).appendTo($where)
+    		}
+    	}
+
+    	function Button(width,height,label){
+    		Widget.call(this,width,height);
+    		this.label = label||"Default";
+    		this.$el = $('<button>').text(this.label);
+    	}
+
+    	Button.prototype = Object.create(Widget.prototype)
+    	Button.prototype.render=function($where){
+    		Widget.prototype.render.call(this,$where)
+    		this.$el.click(this.onclick.bind(this))
+    	}
+    	Button.prototype.onclick=function(e){
+    		console.log(this.label+" is clicked")
+    	}
+    	var btn1 = new Button(200,50,"类");
+    	btn1.render($('body'));
+
+    	//对象关联。委托调用
+    	var OtherWidget = {
+    		init:function(w,h){
+    			this.w = w;
+    			this.h = h;
+    			this.el = null;
+    		},
+    		render:function(where){
+    			if(this.el){
+    				this.el.css({
+    					width: this.w,
+    					height: this.h
+    				}).appendTo(where);
+    			}
+    		}
+    	}
+		var OtherButton = Object.create(OtherWidget)
+    	OtherButton.setup = function(w,h,name){
+    		this.init.call(this,w,h);
+    		this.name = name;
+    		this.el = $("<button>").text(this.name);
+    	}
+    	OtherButton.build=function(where){
+    		this.render.call(this,where)
+    		this.el.click(this.onclick.bind(this))
+    	}
+    	OtherButton.onclick=function(e){
+    		console.log(this.name+" is clicked")
+    	}
+
+    	var btn2 = Object.create(OtherButton)
+    	btn2.setup(300,40,"对象关联")
+    	btn2.build($('body'));
+    </script>
+</html>

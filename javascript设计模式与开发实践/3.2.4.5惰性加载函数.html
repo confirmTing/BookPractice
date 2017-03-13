@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="btn1">按钮一</button>
+    <button id="btn2">按钮二</button>
+    <button id="btn3">按钮三</button>
+    </body>
+    <script type="text/javascript">
+    	// 实现一
+    	var addEvent = function(el,fn,type){
+    		if(window.addEventListener){
+    			return el.addEventListener(type, fn, false);
+    		}
+    		if(window.attachEvent){
+    			return el.attachEvent("on"+type,fn)
+    		}
+    	}
+
+    	// 实现二
+    	var addEvent2 = (function(){
+    		if(window.addEventListener){
+    			return function(el,fn,type){
+    				el.addEventListener(type, fn, false);
+    			}
+    		}
+    		if(window.attachEvent){
+    			return function(el,fn,type){
+    				el.attachEvent("on"+type,fn)
+    			}
+    		}
+    	})()
+
+    	// 实现三
+    	var addEvent3 = (function(){
+    		if(window.addEventListener){
+    			return function(el,fn,type){
+    				el.addEventListener(type, fn, false);
+    			}
+    		}
+    		if(window.attachEvent){
+    			return function(el,fn,type){
+    				el.attachEvent("on"+type,fn)
+    			}
+    		}
+    	})()
+
+    	addEvent(document.getElementById('btn1'),function(){
+    		alert(this.id)
+    	},"click")
+
+    	addEvent2(document.getElementById('btn2'),function(){
+    		alert(this.id)
+    	},"click")
+
+    	addEvent3(document.getElementById('btn3'),function(){
+    		alert(this.id)
+    	},"click")
+
+    </script>
+</html>

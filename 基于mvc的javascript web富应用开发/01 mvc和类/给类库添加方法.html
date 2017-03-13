@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="../../jquery-1.9.1.min.js"></script>
+    </head>
+    <body>
+    <input type="text" id="input">
+    </body>
+    <script type="text/javascript">
+    	'use strict';
+        $('#input').keyup(function(event) {
+            console.log(event)
+        }).click(function(event) {
+            console.log(event)
+        });
+    	var Class = function(){
+    		var klass = function(){
+    			this.init.apply(this,arguments);
+    		}
+    		klass.prototype.init = function(){
+    			this.name = arguments[0];
+    			console.log(arguments)
+    		}
+    		klass.fn = klass.prototype;
+    		klass.fn.parent = klass;
+
+    		klass.extend = function(obj){
+    			var e = obj.extended;
+    			for(var i in obj){
+    				klass[i] = obj[i];
+    			}
+    			if (e) e(klass);
+    		}
+    		klass.inclue = function(obj){
+    			var included = obj.included;
+    			for(var i in obj){
+    				klass.fn[i] = obj[i];
+    			}
+    			if (included) included(klass);
+    		}
+    		return klass;
+    	}
+    	var Person = new Class;
+    	// console.log(Person)
+
+    	Person.extend({ //为对象添加属性
+    		find : function(id){
+    			console.log("find:"+id);
+    		},
+    		exists: function(id){
+    			console.log("exists:"+id);
+    		}
+    	})
+    	Person.find('1');
+
+    	Person.inclue({
+    		save : function(id){
+    			console.log("save:"+id);
+    		},
+    		destory:function(id){
+    			console.log("destory:"+id);
+    		}
+    	})
+
+    	var person = new Person('test1');
+    	console.log(person)
+    	person.save(2)
+    	// Person.prototype.breath = function(){
+    	// 	console.log("breath")
+    	// }
+    	// Person.fn = Person.prototype;
+    	// Person.fn.run = function(){
+    	// 	console.log("run")
+    	// }
+
+    	// // var person = new Person;
+    	// var person = new Person("zhangsan");
+    	// console.log(person)
+    	// person.breath();
+    </script>
+</html>

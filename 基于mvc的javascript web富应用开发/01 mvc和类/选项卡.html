@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="../../jquery-1.9.1.min.js"></script>
+        <style>
+        	#tabs .active{color: #fff;background-color: #f40;}
+        	.tabsCon div{display: none;}
+        	.tabsCon .active{display: block;}
+        </style>
+    </head>
+    <body>
+    	<ul id="tabs">
+    		<li data-tab="user">选项1</li>
+    		<li data-tab="groups">选项2</li>
+    	</ul>
+    	<div class="tabsCon">
+    		<div data-tab="user">safasfasf</div>
+    		<div data-tab="groups">萨科夫接口接撒浪费了</div>
+    	</div>
+    </body>
+    <script type="text/javascript">
+    	$.fn.tabs=function(control){
+    		var self = $(this);
+    		self.on('click', 'li', function(event) {
+    			event.stopPropagation();
+    			var tabName = $(this).data('tab');
+    			self.trigger('changeTabs',tabName)
+    		});
+
+    		self.on('changeTabs',function(e,tabName){
+    			location.hash=tabName;
+    			self.children('li').removeClass('active');
+    			self.children('li[data-tab="'+tabName+'"]').addClass('active');
+    			$(control).children().removeClass('active');
+    			$(control).children('div[data-tab="'+tabName+'"]').addClass('active');
+    		})
+    		$(window).on('hashchange', function(event) {
+    			var tabName = location.hash.slice(1)
+    			console.log(typeof location.hash,tabName)
+    			self.trigger('changeTabs',tabName);
+    		});
+    		var firstName = self.children('li:first').data('tab')
+    		self.children('li:first').addClass('active');
+    		self.trigger('changeTabs',firstName);
+    		// console.log(self.children('li:first'),firstName)
+    		return this;
+    	}
+
+    	$('#tabs').tabs(".tabsCon");
+    </script>
+</html>

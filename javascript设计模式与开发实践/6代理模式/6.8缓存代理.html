@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	// 计算乘积
+    	function mult(){
+    		var a=1;
+    		for(var i =0,l=arguments.length;i<l;i++){
+    			a*=arguments[i];
+    		}
+    		return a;
+    	}
+
+    	// 计算加和
+    	function plus(){
+    		var a = 0;
+    		for(var i =0,l=arguments.length;i<l;i++){
+    			a+=arguments[i];
+    		}
+    		return a;
+    	}
+
+    	// 缓存代理工厂
+    	var createProxyFactory = function(fn){
+    		var cache = {};
+    		return function(){
+    			var ary = [].join.call(arguments,",");
+    			if (cache[ary]) {
+    				return cache[ary];
+    			}
+    			return cache[ary] = fn.apply(this,arguments);
+    		}
+    	}
+
+    	var proxyMult = createProxyFactory(mult);
+    	var proxyPlus = createProxyFactory(plus);
+
+    	console.log(proxyMult(1,2,3,4,5,6));
+    	console.log(proxyMult(1,2,3,4,5,6));
+    	console.log(proxyPlus(1,2,3,4,5,6));
+    	console.log(proxyPlus(1,2,3,4,5,6));
+    </script>
+</html>

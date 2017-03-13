@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="btn1">按钮1</button>
+    <button id="btn2">按钮2</button>
+    <button id="btn3">按钮3</button>
+
+    <button id="btn4">按钮4</button>
+    <button id="btn5">按钮5</button>
+    <button id="btn6">按钮6</button>
+    </body>
+    <script>
+    	var setCommand = function(btn,command){
+			btn.onclick=throttle.call(command,command.execute,300)
+		}
+    	var throttle = function(fn,interval){
+    		var timer,self=this;
+    		return function(){
+    			if(!timer){
+    				fn.apply(self,arguments)
+    			}else{
+    				return false;
+    			}
+    			timer = setTimeout(function(){
+    				clearTimeout(timer);
+    				console.log(111)
+    				timer = false;
+    			}, interval||500)
+    		}
+    	}
+
+    	var MenuBar = {
+    		refresh:function(){
+    			console.log("刷新菜单目录")
+    		}
+    	}
+
+    	var SubMenu = {
+    		add:function(){
+    			console.log("增加子菜单")
+    		},
+    		del:function(){
+    			console.log("删除子菜单")
+    		}
+    	}
+
+    	var btn1 = document.getElementById("btn1");
+    	var btn2 = document.getElementById("btn2");
+    	var btn3 = document.getElementById("btn3");
+    	var refreshMenuBarCommand = Object.create(MenuBar);
+    	refreshMenuBarCommand.execute=function(){
+    		this.refresh();
+    	}
+    	var addSubMenuCommand = Object.create(SubMenu);
+    	addSubMenuCommand.execute = function(){
+    		this.add();
+    	}
+    	var delSubMenuCommand = Object.create(SubMenu);
+    	delSubMenuCommand.execute = function(){
+    		this.del();
+    	}
+    	setCommand(btn1,refreshMenuBarCommand)
+    	setCommand(btn2,addSubMenuCommand)
+    	setCommand(btn3,delSubMenuCommand)
+
+
+    	// 简化版
+    	var bindClick = function(btn,fn){
+    		btn.onclick=throttle(fn,200);
+    	}
+    	bindClick(document.getElementById("btn4"),MenuBar.refresh)
+    	bindClick(document.getElementById("btn5"),SubMenu.add)
+    	bindClick(document.getElementById("btn6"),SubMenu.del)
+    </script>
+</html>

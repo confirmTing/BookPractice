@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <button id="login">登录</button>
+    </body>
+    <script type="text/javascript">
+    	var createLoginlayer = (function(){
+    		var div;
+    		return function(){
+    			if(div){
+    				return div;
+    			}
+    			div = document.createElement("div");
+    			div.innerHTML="我的登录框";
+    			div.style.display="none";
+    			document.body.appendChild(div)
+    			return div
+    		}
+    	})();
+
+    	document.getElementById("login").onclick=function(){
+    		var loginlayer = createLoginlayer();
+    		loginlayer.style.display="block";
+    	}
+    </script>
+</html>

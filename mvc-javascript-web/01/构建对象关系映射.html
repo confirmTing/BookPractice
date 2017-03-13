@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="../../jquery-2.2.1.js"></script>
+        <script type="text/javascript">
+        	var Model = {
+        		inherited : function(){},
+        		created:function(){},
+        		prototype:{
+        			init:function(){}
+        		},
+        		create:function(){
+        			var obj = Object.create(this);
+        			obj.parent=this;
+        			obj.prototype=obj.fn=Object.create(this.prototype)
+        			obj.created();
+        			this.inherited(obj);
+        			return obj;
+        		},
+        		init:function(){
+        			var instance = Object.create(this.prototype);
+        			instance.parent=this;
+        			instance.init.apply(instance,arguments);
+        			return instance;
+        		},
+        		extend:function(o){
+        			var extended = o.extended;
+        			jQuery.extend(this,o);
+					if (extended) {
+						extended(this)
+					}        			
+        		},
+        		include:function(o){
+        			var included = o.included;
+        			jQuery.extend(this.prototype,o);
+        			if (included) {
+        				included(this)
+        			}
+        			
+        		}
+        	}
+
+        	var Asset = Model.create();
+        	var User = Model.create();
+        	var user = User.init();
+        	console.log(User,user)
+
+        	// 添加orm 属性
+        	jQuery.extend(Model,{
+        		find:function(){
+        			console.log('find')
+        		}
+        	});
+        	//添加实例属性
+        	jQuery.extend(Model.prototype,{
+        		init:function(atts){
+        			if(atts) this.load(atts);
+        		},
+        		load:function(attributes){
+        			for(var name in attributes){
+        				this[name] = attributes[name];
+        			}
+        		}
+        	});
+        	
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

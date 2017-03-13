@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var uploadObjs = {
+    		getActiveUploadObj:function(){
+    			try{
+    				return new ActiveXObject("Msxml2.XMLHTTP")
+    			}catch(e){
+    				return false;
+    			}
+    		},
+    		getFlashUploadObj:function(){
+    			if(supportFlash()){
+    				var obj = document.createElement("object");
+    				obj.setAttribute("type", "");
+    				document.body.appendChild(obj);
+    				return obj;
+    			}
+    			return false;
+    		},
+    		getFormUploadObj:function(){
+    			var input = document.createElement("input");
+    			input.type="file";
+    			document.body.appendChild(input);
+    			return input;
+    		},
+    	}
+
+    	var iteratorUploadObj = function(obj){
+    		var value;
+    		for(var i in obj){
+    			value = obj[i]();
+    			if(value){
+    				return value;
+    			}
+    		}
+    	}
+
+    	console.log(iteratorUploadObj(uploadObjs))
+
+    </script>
+</html>

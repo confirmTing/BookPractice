@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var mult = (function() {
+    		var cache = {};
+    		return function(){
+    			var args = [].join.call(arguments,",")
+    			if (cache[args]) {//缓存机制如果输入的参数一样第二次则从缓存中读取数据不会再算一次乘机
+    				return cache[args];
+    			}
+    			var a = 1;
+    			for(var i = 0,len = arguments.length;i<len;i++){
+    				a = a*arguments[i]
+    			}
+    			return cache[args]=a;
+    		}
+    	})()
+    	
+    	alert(mult(2,3,4))
+    </script>
+</html>

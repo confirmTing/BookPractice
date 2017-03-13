@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	var Iterator = function(obj){
+    		var current = 0;
+    		var next = function(){
+    			current+=1;
+    		}
+    		var isDone = function(){
+    			return current>=obj.length;
+    		}
+    		var getCurrentItem = function(){
+    			return obj[current];
+    		}
+
+    		return {
+    			length:obj.length,
+    			next:next,
+    			isDone:isDone,
+    			getCurrentItem:getCurrentItem,
+    		}
+    	}
+
+    	var compare = function(iterator1,iterator2){
+    		if(iterator1.length!==iterator2.length){
+    			console.log("不相等");
+    			return false;
+    		}
+    		while(!iterator1.isDone()&&!iterator2.isDone()){
+    			if(iterator1.getCurrentItem()!==iterator2.getCurrentItem()){
+    				console.log("不相等");
+    				return false;
+    			}
+    			iterator1.next();
+    			iterator2.next();
+    		}
+    		console.log("相等");
+    	}
+
+    	var a = Iterator([1])
+    	var b = Iterator([1,2])
+    	compare(a,b)
+    </script>
+</html>

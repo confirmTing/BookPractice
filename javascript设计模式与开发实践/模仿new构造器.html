@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	function Person(name){
+    		this.name=name
+    	}
+    	Person.prototype.getName=function(){
+    		return this.name;
+    	}
+
+    	function objectFactory (){
+    		var constructor=[].shift.call(arguments),
+    		obj = Object.create(constructor.prototype);
+    		var ret = constructor.apply(obj,arguments);
+    		return typeof ret === "object"?ret:obj;
+    	}
+
+    	var zhangsan = objectFactory(Person,"张三")
+    	// var lisi = new Person("李思","张三")
+    	// console.dir(lisi)
+    	console.dir(zhangsan)
+    	console.log(zhangsan.name)
+    	console.log(zhangsan.getName())
+
+    	var obj = {
+    		name:"王五"
+    	}
+    	var a = Object.create(obj)
+    	console.log(a.name)
+    </script>
+</html>
