@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+    	// 1.构造器模式继承
+    	function extend(Child,Parent){
+    		var F = function(){}
+	    	F.prototype=Parent.prototype
+	    	Child.prototype = new F();
+	    	Child.prototype.constructor = Child;
+	    	Child.uber = Parent.prototype;
+    	}
+
+    	function extend2(Child,Parent){
+    		var c = Child.prototype,
+    		p = Parent.prototype;
+    		for(var k in p){
+    			c[k] = p[k];
+    		}
+	    	c.uber = p;
+    	}
+
+    	function Shap() {}
+    	Shap.prototype.name="Shap";
+    	Shap.prototype.toString=function(){
+    		var cons = this.constructor;
+    		console.log(this.constructor.uber);
+    		return cons.uber?cons.uber+" ,"+this.name:this.name;
+    	}
+
+    	function TwoDShap() {}
+    	extend(TwoDShap,Shap);
+    	// var F = function(){}
+    	// F.prototype=Shap.prototype
+    	// TwoDShap.prototype = new F();
+    	// TwoDShap.prototype.constructor = TwoDShap;
+    	// TwoDShap.uber = Shap.prototype;
+    	TwoDShap.prototype.name = "TwoDShap";
+    	
+
+    	function Triangle(side,height){
+    		this.side = side;
+    		this.height = height;
+    	}
+    	extend(Triangle,TwoDShap);
+    	
+    	// var F = function(){}
+    	// F.prototype=TwoDShap.prototype
+    	// Triangle.prototype = new F();
+    	// Triangle.prototype.constructor = Triangle;
+    	// Triangle.uber = TwoDShap.prototype;
+
+    	Triangle.prototype.name = "Triangle";
+    	Triangle.prototype.getArea = function(){
+    		return this.side*this.height/2;
+    	}
+
+    	var my = new Triangle(10,5);
+    	console.log(my.getArea())
+    	console.log(my.toString())
+
+
+    	// 2. 对象模式
+    	function extendCopy(obj){//浅拷贝
+    		var o = {};
+    		for(var k in obj){
+    			o[k] = obj[k];
+    		}
+    		o.uber = obj;
+    		return o;
+    	}
+    	var shap = {
+    		name:"shap",
+    		toString:function(){
+    			return this.name;
+    		}
+    	}
+
+    	var twoDShap = extendCopy(shap);
+    	twoDShap.name = "2D shap";
+    	twoDShap.toString=function(){
+    		return this.uber+" ,"+this.name;
+    	}
+
+    	var triangle = extendCopy(twoDShap);
+    	triangle.name = "triangle";
+    	triangle.getArea = function(){
+    		return this.side*this.height/2;
+    	}
+    	triangle.side = 10;
+    	triangle.height = 5;
+    	console.log(triangle.getArea())
+    	console.log(triangle.toString())
+
+    	function deepCopy(obj,c){//深拷贝
+    		c = c||{};
+    		if(typeof obj !== "object"){
+    			return;
+    		}
+    		if (window.JSON){
+    			var str = JSON.stringify(obj);
+    			return JSON.parse(str);
+    		}
+    		for(var k in obj){
+    			if (typeof obj[k] === "object") {
+    				c[k] = (obj[k] instanceof Array)?[]:{};
+    				deepCopy(obj[k],c[k]);
+    			}else{
+    				c[k] = obj[k];
+    			}
+    		}
+    		return c;
+    	}
+
+    	var parent = {
+    		numbers:[1,2],
+    		letters:["a","b","c"],
+    		getNumbers:function(){console.log(this.numbers)},
+    		obj:{
+    			prop:1
+    		},
+    		bool:true
+    	}
+    	var mydeep = deepCopy(parent)
+    	console.log(mydeep)
+    	// console.log(mydeep.getNumbers === parent.getNumbers)
+
+
+    	function objectPlus(obj,stuff){//原型继承和属性拷贝混用模式
+    		var n;
+    		var F = function(){}
+    		F.prototype = obj;
+    		n = new F();
+    		n.uber = obj;
+    		for(var k in stuff){
+    			n[k] = stuff[k];
+    		}
+    		return n;
+    	}
+
+    	var shap2 = {
+    		name:"shap",
+    		toString:function(){
+    			return this.name;
+    		}
+    	}
+
+    	var twoDShap2 = objectPlus(shap2,{
+    		name:"2D shap",
+    		toString:function(){
+    			return this.uber+","+this.name;
+    		}
+    	})
+
+    	var triangle2 = objectPlus(twoDShap2,{
+    		name:"triangle",
+    		side:10,
+    		height:5,
+    		getArea:function(){
+    			return this.side*this.height/2;
+    		}
+    	})
+
+    	console.log(triangle2.getArea())
+    	console.log(triangle2.toString())
+    </script>
+</html>
