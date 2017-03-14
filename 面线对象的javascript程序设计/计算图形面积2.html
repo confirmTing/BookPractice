@@ -21,6 +21,7 @@
     		this.lines = [];
     		this.init();
     	}
+        Shap.prototype.childs = [];
     	Shap.prototype.init = function(){
     		if (typeof this.context === "undefined") {
     			var canvas = document.getElementById("mycanvas");
@@ -99,14 +100,26 @@
     	
         (function(){
             var s = new Shap();
-            Triangle.prototype = s;
-            Rectangle.prototype = s;
-            Square.prototype = s;
+            var childsList = [Triangle,Rectangle,Square];
+            for(var i in childsList){
+                for(var k in s){
+                    childsList[i].prototype[k] = s[k];
+                }
+                childsList[i].uber = s;
+            }
+            
+            // Triangle.prototype = s;
+            // Rectangle.prototype = s;
+            // Square.prototype = s;
+            console.log(s.childs);
+            [].push.apply(s.childs,childsList);
+            console.log(s.childs);
 
             var p1 = new Point(100,100);
             var p2 = new Point(300,100);
             var p3 = new Point(200,0);
             var t = new Triangle(p1,p2,p3);
+            console.log(t.constructor.uber);
             t.draw();
             console.log(t.getPerimeter());
             console.log(t.getArea());
