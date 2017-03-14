@@ -64,6 +64,7 @@
     		throw new Error("重写");
     	}
     	Shap.prototype.getPerimeter = function(){
+            this.getLines();
     		var result = 0;
     		for(var i = 0,len=this.lines.length;i<len;i++){
     			result += this.lines[i].length;
@@ -100,6 +101,7 @@
 
     	function Triangle(a,b,c){
     		this.points = [a,b,c];
+            this.init();
     	}
     	object(Triangle,Shap);
     	Triangle.prototype.getArea = function(){
@@ -117,6 +119,7 @@
     		this.points.push(new Point(p.x+side_a,p.y));
     		this.points.push(new Point(p.x+side_a,p.y+side_b));
     		this.points.push(new Point(p.x,p.y+side_b));
+            this.init();
     	}
     	object(Rectangle,Shap);
     	Rectangle.prototype.getArea = function(){
@@ -125,6 +128,7 @@
 
     	function Square(p,side){
     		Rectangle.call(this,p,side,side);
+            this.init();
     	}
     	object(Square,Shap,Rectangle);
 
@@ -132,23 +136,17 @@
     	var p2 = new Point(300,100);
     	var p3 = new Point(200,0);
     	var t = new Triangle(p1,p2,p3);
-    	t.init();
     	t.draw();
-    	t.getLines();
     	console.log(t.getPerimeter());
     	console.log(t.getArea());
     	var r = new Rectangle(new Point(200,200),50,100);
-    	r.init();
     	r.draw();
-    	r.getLines();
     	console.log(r.getPerimeter());
     	console.log(r.getArea());
 
     	var s = new Square(new Point(130,130),50);
     	console.log(s)
-    	s.init();
     	s.draw();
-    	s.getLines();
     	console.log(s.getPerimeter());
     	console.log(s.getArea());
 
