@@ -30,6 +30,7 @@
     	}
 
     	Test.prototype.test = function(name,fn){
+            this.results = document.getElementById("results");
     		this.results = this.assert(true,name).appendChild(document.createElement("ul"));
     		// console.log(this);
     		fn.call(this);
