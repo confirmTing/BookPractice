@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+       <style>
+        	#results li.pass{
+        		color: green;
+        	}
+        	#results li.fail{
+        		color: red;
+        	}
+        </style>
+    </head>
+    <body>
+    <ul id="results"></ul>
+    </body>
+    <script type="text/javascript">
+    	function Test(results) {
+    		this.queue = [];
+            this.paused = false;
+            this.results = document.getElementById("results");
+    	}
+    	Test.prototype.assert = function(value,desc){
+    		var li = document.createElement("li");
+    		li.className = value?"pass":"fail";
+    		li.appendChild(document.createTextNode(desc));
+            console.log(results,this.results)
+    		results.appendChild(li);
+    		if (!value) {
+    			li.parentNode.parentNode.className = "fail";
+    		}
+    		return li;
+    	}
+
+    	Test.prototype.test = function(name,fn){
+            var self = this;
+            this.queue.push(function(){
+                this.results = document.getElementById("results");
+                this.results = self.assert(true,name).appendChild(document.createElement("ul"));
+                fn.call(self);
+            })
+            this.runTest();
+    	}
+
+        Test.prototype.runTest = function(){
+            if (!this.paused&&this.queue.length) {
+                this.queue.shift()();
+                if (!this.paused) {
+                    this.resume();
+                }
+            }
+        }
+
+        Test.prototype.resume = function(){
+            this.paused = false;
+            var self = this;
+            setTimeout(function(){
+                self.runTest();
+            }, 1);
+        }
+
+        Test.prototype.pause = function(){
+            this.paused = true;
+        }
+
+    	var aTest = new Test();
+    	aTest.test("A Test.",function(){
+            this.pause();
+            var self = this;
+            setTimeout(function(){
+                self.assert(true,"first assertion completed");
+                self.assert(true,"second assertion completed");
+                self.assert(true,"third assertion completed");
+                self.resume();
+            }, 1000)
+    	});
+
+        aTest.test("B Test.",function(){
+            this.pause();
+            var self = this;
+            setTimeout(function(){
+                self.assert(true,"first test completed");
+                self.assert(false,"second test failed");
+                self.assert(true,"third assertion completed");
+                self.resume();
+            }, 1000)
+        });
+
+        aTest.test("C Test.",function(){
+            this.pause();
+            var self = this;
+            setTimeout(function(){
+                self.assert(null,"fail");
+                self.assert(true,"pass");
+                self.resume();
+            }, 1000)
+        });
+    </script>
+</html>
