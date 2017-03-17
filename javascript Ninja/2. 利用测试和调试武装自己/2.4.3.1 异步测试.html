@@ -15,6 +15,57 @@
     <ul id="results"></ul>
     </body>
     <script type="text/javascript">
+        // es6 语法
+        class TestA {
+            constructor(){
+               this.queue = [];
+                this.paused = false;
+                this.results = document.getElementById("results"); 
+            }
+            
+            assert(value,desc){
+                var li = document.createElement("li");
+                li.className = value?"pass":"fail";
+                li.appendChild(document.createTextNode(desc));
+                // console.log(results,this.results)
+                this.results.appendChild(li);
+                if (!value) {
+                    li.parentNode.parentNode.className = "fail";
+                }
+                return li;
+            }
+
+            test(name,fn){
+                this.queue.push(()=>{
+                    this.results = document.getElementById("results");
+                    this.results = this.assert(true,name).appendChild(document.createElement("ul"));
+                    fn.call(this);
+                })
+                this.runTest();
+            }
+
+            runTest(){
+                if (!this.paused&&this.queue.length) {
+                    this.queue.shift()();
+                    if (!this.paused) {
+                        this.resume();
+                    }
+                }
+            }
+
+            resume(){
+                this.paused = false;
+                setTimeout(()=>{
+                    this.runTest();
+                }, 1);
+            }
+
+            pause(){
+                this.paused = true;
+            }
+        }
+
+        //es5 语法
     	function Test(results) {
     		this.queue = [];
             this.paused = false;
@@ -24,8 +75,8 @@
     		var li = document.createElement("li");
     		li.className = value?"pass":"fail";
     		li.appendChild(document.createTextNode(desc));
-            console.log(results,this.results)
-    		results.appendChild(li);
+            // console.log(results,this.results)
+    		this.results.appendChild(li);
     		if (!value) {
     			li.parentNode.parentNode.className = "fail";
     		}
@@ -35,8 +86,8 @@
     	Test.prototype.test = function(name,fn){
             var self = this;
             this.queue.push(function(){
-                this.results = document.getElementById("results");
-                this.results = self.assert(true,name).appendChild(document.createElement("ul"));
+                self.results = document.getElementById("results");
+                self.results = self.assert(true,name).appendChild(document.createElement("ul"));
                 fn.call(self);
             })
             this.runTest();
@@ -63,7 +114,7 @@
             this.paused = true;
         }
 
-    	var aTest = new Test();
+    	var aTest = new TestA();
     	aTest.test("A Test.",function(){
             this.pause();
             var self = this;
