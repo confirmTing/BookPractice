@@ -25,6 +25,11 @@
     	window.onload = function(){
     		assert(true,"The test suite is running.");
     		assert(false,"Fail");
+            var useless = function(callback){
+                return callback();
+            }
+            var text = "this is a test";
+            assert(useless(function(){return text}) === text,text);
     	}
     </script>
 </html>

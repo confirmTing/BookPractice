@@ -37,6 +37,7 @@
 
             test(name,fn){
                 this.queue.push(()=>{
+                    this.pause();
                     this.results = document.getElementById("results");
                     this.results = this.assert(true,name).appendChild(document.createElement("ul"));
                     fn.call(this);
@@ -86,6 +87,7 @@
     	Test.prototype.test = function(name,fn){
             var self = this;
             this.queue.push(function(){
+                this.pause();
                 self.results = document.getElementById("results");
                 self.results = self.assert(true,name).appendChild(document.createElement("ul"));
                 fn.call(self);
@@ -116,7 +118,6 @@
 
     	var aTest = new TestA();
     	aTest.test("A Test.",function(){
-            this.pause();
             var self = this;
             setTimeout(function(){
                 self.assert(true,"first assertion completed");
@@ -127,7 +128,6 @@
     	});
 
         aTest.test("B Test.",function(){
-            this.pause();
             var self = this;
             setTimeout(function(){
                 self.assert(true,"first test completed");
@@ -138,12 +138,10 @@
         });
 
         aTest.test("C Test.",function(){
-            this.pause();
-            var self = this;
-            setTimeout(function(){
-                self.assert(null,"fail");
-                self.assert(true,"pass");
-                self.resume();
+            setTimeout(()=>{
+                this.assert(null,"fail");
+                this.assert(true,"pass");
+                this.resume();
             }, 1000)
         });
     </script>
