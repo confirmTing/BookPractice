@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <div id="box"></div>
+    </body>
+    <script type="text/javascript">
+    	var elems = {
+    		length:0,
+    		add:function(elem){
+    			[].push.call(this,elem);
+    		},
+    		gather:function(id){
+    			this.add(document.getElementById(id));
+    		}
+    	}
+    	elems.gather("box");
+    	console.log(elems);
+    	console.log([].pop.call(elems))
+
+    	var a = {}+[];
+    	console.log(a);
+    	var b = []+{};
+    	console.log(b);
+    	console.log({a:1}+1);
+    </script>
+</html>
