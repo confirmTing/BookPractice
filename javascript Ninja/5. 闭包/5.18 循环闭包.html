@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <ul id="list">
+    	<li>1</li>
+    	<li>2</li>
+    	<li>3</li>
+    	<li>4</li>
+    	<li>5</li>
+    </ul>
+    </body>
+</html>
+<script type="text/javascript">
+	var aLi = document.getElementById("list").getElementsByTagName("li");
+	// for(var i=0;i<aLi.length;i++){
+	// 	aLi[i].addEventListener("click", (function(i){
+	// 		return function(){
+	// 			console.log(i)
+	// 		}
+	// 	})(i), false);
+	// }
+
+	for(var i=0;i<aLi.length;i++){
+		(function(i){
+			aLi[i].addEventListener("click", function(){
+				console.log(i)
+			}, false);
+		})(i)
+	}
+</script>
