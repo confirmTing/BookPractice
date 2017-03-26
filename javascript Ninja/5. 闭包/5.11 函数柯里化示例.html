@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script type="text/javascript">
+	Function.prototype.curry = function(){
+		var fn = this,args = [].slice.call(arguments);
+		return function(){
+			args = args.concat([].slice.call(arguments));
+			return fn.apply(this,args);
+		}
+	}
+
+	function test(a,b){
+		return a+b;
+	}
+
+	var aTest = test.curry(1);
+	var result = aTest(3);
+	console.log(result);
+</script>
