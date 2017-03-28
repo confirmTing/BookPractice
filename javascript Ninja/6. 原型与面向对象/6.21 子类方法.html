@@ -7,7 +7,7 @@
     </body>
     <script type="text/javascript">
     	;(function(){
-    		var initializing = false,supperPattern = /xyz/.test(function(){xyz;})?/\b_supper\b/:/.*/;
+    		var initializing = false,supperPattern = /xyz/.test(function(){xyz;})?/\b_super\b/:/.*/;
     		Object.subClass = function subClass(properties){
     			var _super = this.prototype;
     			initializing = true;
@@ -17,6 +17,7 @@
     				proto[key] = typeof properties[key] === "function" && typeof _super[key] === "function" && supperPattern.test(properties[key])?
     				(function(key,fn){
     					return function(){
+                            console.log(this);
     						var tmp = this._super;
     						this._super = _super[key];
     						var ret = fn.apply(this,arguments);
@@ -28,7 +29,7 @@
 
     			function Class(){
     				if (!initializing && this.init) {
-    					this.init.apply(this,arguments)
+    					this.init.apply(this,arguments);
     				}
     			}
     			Class.prototype = proto;
@@ -61,7 +62,9 @@
     	// console.log(/xyz/.test(function(){xyz;}));   //检测函数是否能序列化为字符串
     	var person = new Person(true);
     	console.log(person.dance());
-    	// var ninja = new Ninja();
-    	// console.log(ninja);
+    	var ninja = new Ninja();
+        console.log(ninja);
+        // console.log(ninja instanceof Ninja);
+    	// console.log(ninja instanceof Person);
     </script>
 </html>

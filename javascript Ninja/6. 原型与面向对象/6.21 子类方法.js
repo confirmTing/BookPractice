@@ -2,45 +2,45 @@
 * @Author: confirmTing
 * @Date:   2017-03-27 11:16:14
 * @Last Modified by:   confirmTing
-* @Last Modified time: 2017-03-27 11:45:17
+* @Last Modified time: 2017-03-28 17:11:55
 */
 
 'use strict';
-;(function(){
-	var initializing = false,supperPattern = /xyz/.test(function(){xyz;})?/\b_supper\b/:/.*/;
+;(function() {
+	var initFlag = false,reg = /xyz/.test(function(){xyz;})?/\b_super\b/g:/.*/g;
 	Object.subClass = function subClass(properties){
 		var _super = this.prototype;
-		initializing = true;
+		initFlag = true;
 		var proto = new this();
-		initializing = false;
-		for(var key in properties){
-			proto[key] = typeof properties[key] === "function" && typeof _super[key] === "function" && supperPattern.test(properties[key])?
+		initFlag = false;
+		for(var k in properties){
+			proto[k] = typeof properties[k] === "function" && typeof _super[k] === "function" && reg.test(properties[k])?
 			(function(key,fn){
 				return function(){
-					var tmp = this._super;
+					var oldSuper = this._super;
 					this._super = _super[key];
-					var ret = fn.apply(this,arguments);
-					this._super = tmp;
-					return ret;
+					var result = fn.apply(this,arguments);
+					this._super = oldSuper;
+					return result;
 				}
-			})(key,properties[key]):properties[key];
+			})(k,properties[k]):properties[k];
 		}
 
 		function Class(){
-			if (!initializing && this.init) {
-				this.init.apply(this,arguments)
+			if (!initFlag&&this.init) {
+				this.init.apply(this,arguments);
 			}
 		}
 		Class.prototype = proto;
-		Class.constructor = Class;
+		Class.prototype.constructor = Class;
 		Class.subClass = subClass;
 		return Class;
 	}
 })();
 
 var Person = Object.subClass({
-	init(isDancing){
-		this.dancing = isDancing;
+	init(flag){
+		this.dancing = flag;
 	},
 	dance(){
 		return this.dancing;
@@ -57,10 +57,12 @@ var Ninja = Person.subClass({
 	swingSword(){
 		return true;
 	}
-})
-// console.log(/xyz/.test(function(){xyz;}));   //检测函数是否能序列化为字符串
+});
+
 var person = new Person(true);
 console.log(person.dance());
-var ninja = new Ninja();
-console.log(ninja);
+console.log(person instanceof Person);
 
+var ninja = new Ninja();
+console.log(ninja.dance());
+console.log(ninja instanceof Person);
