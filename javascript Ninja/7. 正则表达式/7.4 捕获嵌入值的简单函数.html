@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <div id="box" style="opacity: 0.5;filter: alpha(opacity=50);"></div>
+    </body>
+    <script type="text/javascript">
+    	function getOpacity(ele){
+    		var filter = ele.style.filter;
+    		if (!filter) {
+    			return ele.style.opacity;
+    		}
+    		// var filter = "alpha(opacity=50)";
+    		if(filter.indexOf("opacity")<0){
+    			return ""
+    		}
+    		var reg = /opacity=([^)]+)/;
+    		var result = filter.match(reg);
+    		// console.log(result)
+    		return (parseFloat(result[1])/100)+"";
+    	}
+
+    	console.log(getOpacity(document.getElementById("box")));
+    	// alert(getOpacity(document.getElementById("box")));
+    </script>
+</html>
