@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <form id="testForm" action="/">
+    	<input type="text" id="id">
+    	<input type="text" name="action">
+    </form>
+    </body>
+</html>
+<script type="text/javascript">
+	var aForm = document.getElementById("testForm");
+	console.log(aForm.id);
+	console.log(aForm.action);
+
+	console.log(aForm.getAttribute("id"));
+	console.log(aForm.getAttribute("action"));
+</script>

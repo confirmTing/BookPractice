@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <div id="box">123</div>
+    </body>
+    <script type="text/javascript">
+    	var bindEvent = (function(){
+    		if (document.addEventListener) {
+    			return function(ele,type,fn){
+    				ele.addEventListener(type, fn, false)
+    				return fn;
+    			}
+    		}
+    		if (document.attachEvent) {
+    			return function(ele,type,fn){
+    				var bound = function(){
+    					fn.call(ele);
+    				}
+    				ele.attachEvent("on"+type,bound);
+    				return bound;
+    			}
+    		}
+    	})();
+
+    	var removeEvent = (function(){
+    		if (document.addEventListener) {
+    			return function(ele,type,fn){
+    				ele.removeEventListener(type, fn, false)
+    			}
+    		}
+    		if (document.attachEvent) {
+    			return function(ele,type,fn){
+    				ele.detachEvent("on"+type, fn);
+    			}
+    		}
+    	})()
+
+    	var eventFn = bindEvent(document.getElementById("box"),"click",function(){
+    		console.log("123");
+    		removeEvent(this,"click",eventFn);
+    	})
+    	// console.log(eventFn);
+    </script>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+</html>
+<script type="text/javascript">
+	var fixedEvent = function(event){
+		var returnFalse = function(){
+			return false;
+		},
+		returnTrue = function(){
+			return true;
+		};
+		if(!event||!event.stopPropagation){
+			var old = event||window.event;
+			event = {};
+			for(var k in old){
+				event[k] = old[k];
+			}
+			if (!event.target) {
+				event.target = event.srcElement||document;
+			}
+			event.relatedTarget = event.fromElement===event.target?event.toElement,event.fromElement;
+			event.preventDefault = function(){
+				event.returnValue = false;
+				event.isDefaultPrevented = returnTrue;
+			}
+			event.isDefaultPrevented = returnFalse;
+			event.stopPropagation = function(){
+				event.cancelBubble = true;
+				event.isPropagationStopped = returnTrue;
+			}
+			event.isPropagationStopped = returnFalse;
+			if (event.clientX!=null) {
+				var doc = document.documentElement,body = document.body;
+				event.pageX = event.clientX+(doc&&doc.scrollLeft||body&&body.scrollLeft||0)-(doc&&doc.clientLeft||body&&body.clientLeft||0);
+				event.pageY = event.clientY+(doc&&doc.scrollTop||body&&body.scrollTop||0)-(doc&&doc.clientTop||body&&body.clientTop||0);
+			}
+			event.which = event.charCode||event.keyCode;
+			if (event.button!=null) {
+				event.button = (event.button&1)
+			}
+		}
+	}
+</script>

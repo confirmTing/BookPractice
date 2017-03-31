@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	(function(global){
+		var translations = {
+			"for":"htmlFor",
+			"class":"className",
+			"readonly":"readOnly",
+			"maxlength":"maxLength",
+			"cellspacing":"cellSpacing",
+			"rowspan":"rowSpan",
+			"colspan":"colSpan",
+			"tabindex":"tabIndex",
+			"cellpadding":"cellPadding",
+			"usemap":"useMap",
+			"frameborder":"frameBorder",
+			"contenteditable":"contentEditable",
+		}
+		global.attr = function(ele,name,value){
+			var property = translations[name]||name,
+				flag = typeof ele[property] !== "undefined";
+			if (value) {
+				if (flag) {
+					ele[property] = value;
+					return;
+				}
+				ele.setAttribute(name,value);
+				return
+			}
+			if (flag) {
+				return ele[property];
+			}
+			return ele.getAttribute(name);
+		}
+	})(this);
+
+	var aDiv = document.createElement("div");
+	attr(aDiv,"id","box");
+	console.log(aDiv);
+	console.log(attr(aDiv,"id"));
+</script>
+</html>
