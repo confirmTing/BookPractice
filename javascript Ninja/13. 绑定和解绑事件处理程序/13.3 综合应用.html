@@ -2,8 +2,17 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <style>
+        	div{margin-bottom: 20px;}
+        	#loading{display: none;}
+        </style>
     </head>
     <body>
+    <div id="box0">0000</div>
+    <div id="box1">1111</div>
+    <div id="box2">2222</div>
+    <div id="loading">loading...</div>
+    <button id="clickMe">clickMe</button>
     </body>
 </html>
 <script type="text/javascript">
@@ -23,7 +32,7 @@
 			if (!event.target) {
 				event.target = event.srcElement||document;
 			}
-			event.relatedTarget = event.fromElement===event.target?event.toElement,event.fromElement;
+			event.relatedTarget = event.fromElement===event.target?event.toElement:event.fromElement;
 			event.preventDefault = function(){
 				event.returnValue = false;
 				event.isDefaultPrevented = returnTrue;
@@ -41,8 +50,208 @@
 			}
 			event.which = event.charCode||event.keyCode;
 			if (event.button!=null) {
-				event.button = (event.button&1)
+				if (event.button===1) {
+					event.button = 0;
+				}else if(event.button===2){
+					event.button = 1;
+				}else{
+					event.button = 2;
+				}
 			}
 		}
+		return event;
 	}
+	var $ = (function(){
+		var cache = {},guid=1,expando = "data"+ new Date().getTime();
+		return {
+			getData:function(ele){
+				var id = ele[expando];
+				if (!id) {
+					id = ele[expando] = guid++;
+					cache[id] = {};
+				}
+				return cache[id];
+			},
+			removeData:function(ele){
+				var id = ele[expando];
+				if (!id) return;
+				delete cache[id];
+				try{
+					delete ele[expando];
+				}catch(e){
+					ele.removeAttribute&&ele.removeAttribute(id);
+				}
+			}
+		}
+	})();
+
+	var addEvent = (function(){
+		var guid = 1;
+		return function(ele,type,fn){
+			var data = $.getData(ele);
+			data.handlers||(data.handlers={});
+			data.handlers[type]||(data.handlers[type]=[]);
+			fn.guid||(fn.guid=guid++);
+			data.handlers[type].push(fn);
+			if (!data.dispatcher) {
+				data.disabled = false;
+				data.dispatcher = function(event){
+					if (data.disabled) {return;}
+					event = fixedEvent(event);
+					var handlers = data.handlers[event.type];
+					if (!handlers) {return;}
+					for(var i = 0;i<handlers.length;i++){
+						handlers[i].call(ele,event);
+					}
+				}
+			}
+			if (data.handlers[type].length===1) {
+				if (document.addEventListener) {
+					ele.addEventListener(type, data.dispatcher, false);
+				}
+				if (document.attachEvent) {
+					ele.attachEvent("on"+type, data.dispatcher);
+				}
+			}
+		}
+	})();
+
+	var removeEvent = (function(){
+		var isEmpty = function(obj){
+			for(var k in obj){
+				return false;
+			}
+			return true;
+		}
+		var removeEvent =  function(ele,type){
+			var data = $.getData(ele);
+			if (data.handlers[type].length>=0) {
+				delete data.handlers[type];
+				if (document.removeEventListener) {
+					ele.removeEventListener(type, data.dispatcher, false);
+				}
+				if (document.detachEvent) {
+					ele.detachEvent(type, data.dispatcher);
+				}
+			}
+			if (isEmpty(data.handlers)) {
+				delete data.handlers;
+				delete data.dispatcher;
+			}
+			if(isEmpty(data)){
+				$.removeData(data);
+			}
+		}
+
+		return function(ele,type,fn){
+			var data = $.getData(ele);
+			if (!data.handlers) return;
+			var removeType = function(t){
+				data.handlers[t] = [];
+				removeEvent(ele,t);
+			}
+			if (!type) {
+				for(var k in data.handlers){
+					removeType(k);
+				}
+				return;
+			}
+			var handlers = data.handlers[type];
+			if (!handlers) return;
+			if (!fn) {
+				removeType(type);
+				return;
+			}
+			if (fn.guid) {
+				for(var i=0;i<handlers.length;i++){
+					if (fn.guid===handlers[i].guid) {
+						handlers.splice(i--,1);
+					}
+				}
+			}
+		}
+	})();
+
+	var triggerEvent = function(ele,event){
+		var data = $.getData(ele),parent = ele.parentNode||ele.ownerDocument,flag=false;
+		if (typeof event === "string") {
+			event = {type:event,target:ele};
+			flag = true;
+		}
+		event = fixedEvent(event);
+		if (data.dispatcher) {
+			data.dispatcher.call(ele,event);
+		}
+		if (parent&&!event.isPropagationStopped()) {
+			triggerEvent(parent,event);
+			return
+		}
+		/*if (!parent&&!event.isDefaultPrevented()) {
+			var data = $.getData(event.target);
+			console.log(flag);
+			if (event.target[event.type]) {
+				data.disabled = true;
+				event.target[event.type]();
+				data.disabled = false;
+			}
+		}*/
+	}
+
+	addEvent(window,"load",function(){
+		/*var getColor = function(){
+			var str = "#";
+			for(var i = 0;i<3;i++){
+				var randomNum = Math.floor(Math.random()*255);
+				str += randomNum.toString(16);
+			}
+			return str;
+		}
+
+		var setColor = function(){
+			this.style.backgroundColor = getColor();
+		}
+
+		var aDivs = document.getElementsByTagName("div");
+		for(var i =0,len = aDivs.length;i<len;i++){
+			(function(ele){
+				addEvent(ele,"mouseover",setColor);
+				addEvent(ele,"mouseover",console.log);
+				addEvent(ele,"click",setColor);
+			})(aDivs[i]);
+		}
+		removeEvent(document.getElementById("box2"),"mouseover",setColor);
+		removeEvent(document.getElementById("box1"),"mouseover");
+		removeEvent(document.getElementById("box0"));*/
+
+
+		var body = document.body;
+		addEvent(body,"ajax-start",function(){
+			document.getElementById("loading").style.display = "inline-block";
+		})
+
+		addEvent(body,"ajax-end",function(){
+			document.getElementById("loading").style.display = "none";
+			console.log("ajax-end");
+		})
+
+		addEvent(body,"click",function(){
+			document.getElementById("loading").style.display = "inline-block";
+			console.log("bodyClick");
+		})
+
+		var performAjax = function(ele){
+			triggerEvent(ele,"ajax-start");
+			setTimeout(function(){
+				triggerEvent(ele,"ajax-end");
+			}, 2000);
+		}
+
+		addEvent(document.getElementById("clickMe"),"click",function(event){
+			event.stopPropagation();
+			performAjax(this);
+		})
+
+		triggerEvent(document.getElementById("clickMe"),"click");
+	})
+
 </script>
