@@ -173,28 +173,27 @@
 	})();
 
 	var triggerEvent = function(ele,event){
-		var data = $.getData(ele),parent = ele.parentNode||ele.ownerDocument,flag=false;
+		var data = $.getData(ele),parent = ele.parentNode||ele.ownerDocument;
 		if (typeof event === "string") {
 			event = {type:event,target:ele};
-			flag = true;
 		}
 		event = fixedEvent(event);
 		if (data.dispatcher) {
 			data.dispatcher.call(ele,event);
 		}
+		console.log(ele);
 		if (parent&&!event.isPropagationStopped()) {
 			triggerEvent(parent,event);
 			return
 		}
-		/*if (!parent&&!event.isDefaultPrevented()) {
+		if (!parent&&!event.isDefaultPrevented()) {
 			var data = $.getData(event.target);
-			console.log(flag);
 			if (event.target[event.type]) {
 				data.disabled = true;
 				event.target[event.type]();
 				data.disabled = false;
 			}
-		}*/
+		}
 	}
 
 	addEvent(window,"load",function(){
@@ -226,6 +225,7 @@
 
 		var body = document.body;
 		addEvent(body,"ajax-start",function(){
+			console.log("ajax-start");
 			document.getElementById("loading").style.display = "inline-block";
 		})
 
