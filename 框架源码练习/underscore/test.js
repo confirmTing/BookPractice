@@ -45,7 +45,7 @@ function shuffle(obj){
 	var len = obj.length,rand,result=Array(len);
 	for (var i = 0; i < len; i++) {
 		rand = random(0,i)
-		console.log(rand,i)
+		// console.log(rand,i)
 		if (rand !== i) {
 			result[i] = result[rand];
 		}
@@ -54,10 +54,60 @@ function shuffle(obj){
 	return result
 }
 
-test(3);
-var max = testEach(results);
-console.log(shuffle(results))
+// test(3);
+// var max = testEach(results);
+// console.log(shuffle(results))
 // testPush(50000000);
 
 var hasEnumBug = { toString: null }.propertyIsEnumerable("toString");
 // console.log(hasEnumBug)
+function initial(arr, n, guard) {
+	var num = (n == null || guard ? 1 : n);
+	num = Math.max(0, num);
+	return [].slice.call(arr, 0, arr.length-num);
+}
+// console.log(initial([1,2,3,4,5],2));
+
+var flatten = function (input, shallow, strict, startIndex) {
+	var output = [], idx = 0;
+	for (var i = startIndex || 0, len = input.length; i < len; i++) {
+		var value = input[i];
+		if ( underscore.isArray(value) || underscore.isArguments(value)) {
+			if (!shallow) value = flatten(value, shallow, strict);
+			var j = 0, length = value.length;
+			output.length += length;
+			while (j < length) {
+				output[idx++] = value[j++]
+			}
+		} else if (!strict) {
+			output[idx++] = value;
+		}
+	}
+	return output;
+}
+
+// console.log(flatten([1,[2,3,[4,5]]],true,false));
+
+function range(start, stop, step) {
+	if (stop == null) {
+		stop = start || 0;
+		start = 0;
+	}
+	step = step || 1;
+	var len = Math.max(Math.ceil((stop - start) / step), 0);
+	var result = Array(len);
+	for (var i = 0; i < len; i++ , start += step) {
+		result[i] = start;
+	}
+	return result;
+}
+
+// console.log(range(0,-10,-1))
+
+function testDefer(){
+	underscore.defer(function(){
+		console.log("defer");
+	});
+	return console.log("before");
+}
+testDefer()
