@@ -5,9 +5,8 @@
     </head>
     <body>
     </body>
+    <script src="myUnderscore.js"></script>
     <script type="text/javascript">
-    	var hasEnumBug1 = {}.propertyIsEnumerable("toString");
-    	var hasEnumBug2 = {toString:null}.propertyIsEnumerable("toString");
-		alert(hasEnumBug1+","+hasEnumBug2)
+    	console.log(_.isFunction)
     </script>
 </html>

@@ -1,4 +1,4 @@
-var underscore = require("./underscore.js");
+var underscore = require("./myUnderscore.js");
 underscore.each("123", function (el, index,list,nicai) {
 	console.log(`el:${el},index:${index},${nicai}`);
 });
@@ -110,4 +110,12 @@ function testDefer(){
 	});
 	return console.log("before");
 }
-testDefer()
+// testDefer()
+
+// console.log(underscore.pick({name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age'));
+
+console.log(underscore.isFunction(function(){}));
+
+console.log(underscore.pick({name: 'moe', age: 50, userid: 'moe1'}, function(value, key, object) {
+  return underscore.isNumber(value);
+}));
