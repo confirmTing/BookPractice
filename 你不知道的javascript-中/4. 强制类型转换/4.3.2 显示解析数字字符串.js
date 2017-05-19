@@ -12,6 +12,7 @@ console.log(parseInt("n",19))
 console.log("步奏解析结束...")
 
 //小数位7位按指数显示
+//parseInt第一个参数如果不是字符串会先转换成字符串
 console.log(0.000000001.toString())
-console.log(parseInt(0.000001))
+console.log(parseInt(0.0000001))
 
