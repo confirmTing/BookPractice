@@ -19,3 +19,5 @@ new Promise(resolve => {
 }, err => {
     console.log('err2:', err);
 });
+
+//then()函调的命名，官方命名为onFulfilled和onRejected，我们为了方便可以把on省略
