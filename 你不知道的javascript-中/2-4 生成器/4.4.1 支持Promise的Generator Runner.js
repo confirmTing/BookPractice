@@ -1,3 +1,4 @@
+let {run2} = require('./utils');
 function ajax(url, cb) {
     setTimeout(() => {
         let err = Math.random() > 0.8 ? new Error("数字太大")  : null;
@@ -22,27 +23,6 @@ if (!Promise.wrap) {
 
 let request = Promise.wrap(ajax);
 
-function run(gen, ...args) {
-    let it;
-    it = gen.apply(this, args);
-    return Promise.resolve().then(function handleNext(v) {
-        let next = it.next(v);
-        return (function handleResult (next) {
-            //生成器运行完毕了吗？
-            if (next.done) {
-                return next.value;
-            }
-
-            return Promise.resolve(next.value).then(
-                handleNext,
-                function handleErr(err) {
-                    return Promise.resolve(it.throw(err)).then(handleResult);
-                }
-            )
-        })(next);
-    })
-}
-
 function foo(x, y) {
     return request('' + x +y);
 }
@@ -59,26 +39,7 @@ function *main() {
 
 run2(main);
 
-function run2(gen, ...args) {
-    let it;
-    it = gen.apply(null, args);
-    return Promise.resolve().then(function handleNext(v) {
-        let res = it.next(v);
-        if (res.done){
-            return res.value;
-        }
-        return (function (val) {
-            Promise.resolve(val).then(
-                handleNext,
-                err => {
-                    it.throw(err);
-                }
-            )
-        })(res.value);
-    })
-}
-
-//async 与 await 请安装node8.0版本
+//async 与 await 请安装node7.2以上版本
 async function foo2() {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -89,11 +50,14 @@ async function foo2() {
 
 async function main2() {
     // 如果你await了一个Promise 它会暂停这个函数直到Promise决议
-    let res = await foo(1, 2);
-    console.log('text2:', res);
-    let text = await foo2();
-    console.log('text2:', text);
+    try{
+        let res = await foo(1, 2);
+        console.log('text2:', res);
+        let text = await foo2();
+        console.log('text2:', text);
+    }catch (err) {
+        console.log('err2:', err)
+    }
 }
 
 main2();
-
