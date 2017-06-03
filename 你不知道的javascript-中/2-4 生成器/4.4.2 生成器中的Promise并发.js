@@ -40,6 +40,7 @@ function *betterFoo2() {
 }
 
 //隐藏的Promise
+//尽量把Promise逻辑隐藏在一个只从生成器代码中调用的函数内部
 function bar(url1, url2) {
     return Promise.all([
         request(url1),
