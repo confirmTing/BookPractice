@@ -51,10 +51,10 @@ Promise.all([p3, p4]).then(() => {
     console.log('err, Promise.all:', err);
 });
 
-function runAll(...args) {
+function runAll(...gens) {
     return Promise.resolve().then(() => {
         let its = [], promises = [];
-        args.forEach((gen, index) => {
+        gens.forEach((gen, index) => {
             let it = gen();
             let p = it.next().value;
             p.then(data => {
@@ -75,9 +75,24 @@ function runAll(...args) {
     });
 }
 
+function runAll2(...gens) {
+    let its = gens.map(gen => {
+        return gen();
+    });
+    let promises = its.map(it => {
+        return it.next().value;
+    });
+    return Promise.all(promises).then(datas => {
+        its.forEach((it, i) => {
+            it.next(datas[i]);
+            it.next();
+        })
+    });
+}
+
 function testRunAll() {
     let res = [];
-    runAll(function *() {
+    runAll2(function *() {
         let data = yield request('E');
         yield;
         res.push(data);
@@ -88,7 +103,7 @@ function testRunAll() {
     }).then(() => {
         console.log('testRunAll:', res);
     }, err => {
-        console.log(err);
+        console.log('出错啦：', err);
     })
 }
 
