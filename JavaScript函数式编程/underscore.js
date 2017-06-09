@@ -1437,7 +1437,7 @@
     }
 
     var result = function (instance, obj) {
-        return instance._chain ? _(obj)._chain() : obj;
+        return instance._chain ? _(obj).chain() : obj;
     }
 
     // 允许用您自己的实用程序函数扩展Underscore。传递一个 {name: function}定义的哈希添加到Underscore对象，以及面向对象封装。
