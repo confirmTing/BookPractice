@@ -450,7 +450,7 @@
             idx = 0;
         for (var i = startIndex || 0, len = getLength(input); i < len; i++) {
             var value = input[i];
-            if (isArrayLike(value) && _.isArray(value) || _.isArguments(value)) {
+            if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
                 if (!shallow) value = flatten(value, shallow, strict);
                 var j = 0,
                     length = value.length;
@@ -1049,7 +1049,7 @@
         }
         for (var i = 0, len = keys.length; i < len; i++) {
             var key = keys[i];
-            if (iteratee(obj[key], i, obj)) result[key] = obj[key];
+            if (iteratee(obj[key], key, obj)) result[key] = obj[key];
         }
         return result;
     }

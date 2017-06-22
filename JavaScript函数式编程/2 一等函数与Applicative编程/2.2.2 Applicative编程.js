@@ -24,3 +24,6 @@ console.log(allOf(t,t,t));
 console.log(allOf(t,t,t,f));
 console.log(anyOf(f,f,f));
 console.log(anyOf(t,t,t,f));
+
+let obj = {name: 'ZhangSan', age: 20};
+console.log(_.invert(obj));

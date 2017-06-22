@@ -11,7 +11,7 @@ console.log([] == ![])
 console.log(2 == [2])
 //"" == ""  [null].toStrng()返回""
 console.log(String([null]))
-console.log("" == [null])
+console.log(`"" == [null]: ${"" == [null]}`)
 
 console.log(0 == "\n")
 console.log(0 == " ")

@@ -7,7 +7,7 @@ console.log(a == b)
 c = true
 
 //如果有一个值是布尔类型则会把布尔值转成数字然后进行比较
-console.log(a==c)
+console.log(a == c)
 console.log("1" == true)
 console.log(0 == false)
 
@@ -30,12 +30,12 @@ console.log(a == b)
 //因为null和undefined没有对应的封装对象所以null和undefined不能被封装，结果和Object()返回结果相同
 a = null
 b = Object(a)
-console.log(a ==b)   // null == {}
+console.log(a == b)   // null == {}
 a = undefined
 b = Object(a)
-console.log(a ==b)   //undefined == {}
+console.log(a == b)   //undefined == {}
 
 //NaN 可以被封装为数字封装对象但是NaN不等于NaN
 a = NaN
 b = Object(a)
-console.log(a ==b)  //NaN == NaN
+console.log(a == b)  //NaN == NaN
