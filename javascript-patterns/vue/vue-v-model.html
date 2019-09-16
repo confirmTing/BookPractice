@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-model</title>
+  <style>
+    body {
+      padding-top: 50px;
+      text-align: center;
+    }
+
+    input {
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+
+    div {
+      margin-top: 20px;
+    }
+  </style>
+  <script src="https://data.dadaabc.com/vendor/vue/2.5.13/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <my-input title="姓名" v-model="name" @click.native="handleMyInputClick"></my-input>
+
+    <div>姓名：{{name}}</div>
+</div>
+
+<template id="my-input">
+  <div>
+    <label>
+      <span>{{title}}</span>
+      <input type="text" v-model.trim="val" @click="handleInputClick">
+    </label>
+  </div>
+</template>
+
+<script>
+  Vue.component('myInput', {
+    template: '#my-input',
+
+    props: {
+      value: [String, Number],
+      title: String,
+    },
+
+    // model: {
+    //   prop: 'value',
+    //   event: 'my-event',
+    // },
+
+    data() {
+      return {
+        val: '',
+      };
+    },
+
+    watch: {
+      val() {
+        this.handleValChange();
+      },
+    },
+
+    methods: {
+      handleValChange() {
+        this.$emit('input', this.val);
+      },
+
+      handleInputClick() {
+        this.$emit('my-event', this.val);
+      },
+    },
+  });
+
+  new Vue({
+    el: '#app',
+
+    data() {
+      return {
+        name: '',
+      };
+    },
+
+    methods: {
+      handleMyInputClick() {
+        console.log('myInput clicked');
+      },
+    }
+  })
+</script>
+</body>
+</html>

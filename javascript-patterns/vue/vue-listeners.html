@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>listeners</title>
+  <style>
+    body {
+      padding-top: 50px;
+      text-align: center;
+    }
+    .btn {
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+    }
+
+    input {
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+
+  </style>
+  <script src="https://data.dadaabc.com/vendor/vue/2.5.13/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <base-input v-model="name" label="姓名" @click="handleInputClick"></base-input>
+</div>
+
+<template id="input">
+  <div>
+    <label>
+      {{ label }}
+      <input
+        v-bind="$attrs"
+        :value="value"
+        v-on="inputListeners"
+      >
+    </label>
+  </div>
+</template>
+
+<script>
+  Vue.component('base-input', {
+    template: '#input',
+    inheritAttrs: false,
+    props: ['label', 'value'],
+    computed: {
+      inputListeners: function () {
+        var vm = this;
+        return Object.assign({},
+          // 我们从父级添加所有的监听器
+          this.$listeners,
+          // 然后我们添加自定义监听器，
+          // 或覆写一些监听器的行为
+          {
+            // 这里确保组件配合 `v-model` 的工作
+            input: function (event) {
+              vm.$emit('input', event.target.value);
+            }
+          }
+        )
+      }
+    },
+  });
+
+  new Vue({
+    el: '#app',
+
+    data() {
+      return {
+        name: '',
+      };
+    },
+
+    methods: {
+      handleInputClick() {
+        console.log('click');
+      },
+    },
+  })
+</script>
+</body>
+</html>

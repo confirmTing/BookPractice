@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>.sync</title>
+  <style>
+    body {
+      padding-top: 50px;
+      text-align: center;
+    }
+    .btn {
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+    }
+
+    input {
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .modal {
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding-top: 50px;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .7);
+      color: #fff;
+    }
+
+    .modal button {
+      margin-top: 20px;
+      padding: 5px 15px;
+      color: #fff;
+      border: 1px solid #fff;
+      background: transparent;
+    }
+
+    .sync-object,
+    .person {
+      margin-top: 50px;
+    }
+    .sync-object div {
+      margin-top: 20px;
+    }
+  </style>
+  <script src="https://data.dadaabc.com/vendor/vue/2.5.13/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <button class="btn" @click="modalVisible = true">显示模态框</button>
+  <modal v-if="modalVisible" :visible.sync="modalVisible"></modal>
+
+  <div class="person">
+    姓名： {{person.name}} <br />
+    年龄： {{person.age}}
+  </div>
+  <sync-object v-bind.sync="person"></sync-object>
+</div>
+
+<template id="modal">
+  <div class="modal">
+    <div>我是模态框</div>
+    <button @click="close">关闭</button>
+  </div>
+</template>
+
+<template id="sync-object">
+  <div class="sync-object">
+    <div>
+      <input type="text" v-model="newName">
+      <button class="btn" @click="$emit('update:name', newName)">更新名字</button>
+    </div>
+    <div>
+      <input type="text" v-model="newAge">
+      <button class="btn" @click="$emit('update:age', newAge)">更新年龄</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  Vue.component('modal', {
+    template: '#modal',
+    props: {
+      visible: Boolean,
+    },
+
+    methods: {
+      close() {
+        this.$emit('update:visible', false);
+      },
+    },
+  });
+
+  Vue.component('syncObject', {
+    template: '#sync-object',
+
+    props: {
+      name: {
+        type: String,
+        required: true,
+      },
+      age: {
+        type: [String, Number],
+        required: true,
+      },
+    },
+
+    data() {
+      return {
+        newAge: '',
+        newName: '',
+      };
+    },
+  });
+
+  new Vue({
+    el: '#app',
+
+    data() {
+      return {
+        name: '',
+        modalVisible: false,
+        person: {
+          name: '张三',
+          age: 20,
+        },
+      };
+    },
+  })
+</script>
+</body>
+</html>
